@@ -1,12 +1,12 @@
 {
   "model_name": "medical-ner",
-  "version": "2.0.0",
-  "dataset_version": "v2-2026-clinical-ner-benchmark",
-  "precision": 1.0,
-  "recall": 0.92,
-  "f1": 0.9583,
+  "version": "2.1.0",
+  "dataset_version": "v2.1-clinical-ner-healthcare-benchmarks",
+  "precision": 0.9167,
+  "recall": 0.9167,
+  "f1": 0.9167,
   "field_accuracy": 1.0,
-  "cer": 0.008,
-  "wer": 0.015,
-  "latency_ms": 3.1
+  "cer": 0.005,
+  "wer": 0.01,
+  "latency_ms": 2.7
 }

@@ -12,6 +12,7 @@ import {
   Button,
 } from '@healthx/ui';
 import { apiFetch } from '@/lib/api';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import {
   HeartPulse,
   FileText,
@@ -30,6 +31,7 @@ import {
 } from 'lucide-react';
 
 export default function DashboardPage() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
   const [documents, setDocuments] = useState<any[]>([]);
@@ -100,13 +102,13 @@ export default function DashboardPage() {
           <Link href="/records/upload">
             <Button size="sm" className="flex items-center gap-1.5 shadow-sm">
               <Upload className="w-3.5 h-3.5" />
-              <span>Upload Document</span>
+              <span>{t.uploadDocument}</span>
             </Button>
           </Link>
           <Link href="/assistant">
             <Button size="sm" variant="outline" className="flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              <span>AI Copilot</span>
+              <span>{t.navCopilot}</span>
             </Button>
           </Link>
         </div>

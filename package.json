@@ -15,7 +15,7 @@
     "test:api": "vitest run tests/integration/api.test.ts",
     "test:security": "vitest run tests/security/security.test.ts",
     "test:rag": "vitest run tests/rag/rag.test.ts",
-    "test:ml": "cd apps/ml-service && pytest -v",
+    "test:ml": "cd apps/ml-service && python -m pytest test_ml.py -v",
     "dev:api": "npm --workspace=@healthx/api run dev",
     "dev:web": "npm --workspace=@healthx/web run dev",
     "dev:ml": "cd apps/ml-service && uvicorn main:app --reload --port 8000",

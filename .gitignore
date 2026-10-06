@@ -8,6 +8,8 @@ __pycache__/
 *.db
 *.db-journal
 .env.local
+.env
 .DS_Store
 *.log
 scratch/
+*.tsbuildinfo

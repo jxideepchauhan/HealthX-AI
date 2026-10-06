@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent, Badge, Button, Input } from '@healthx/ui';
 import { apiFetch } from '@/lib/api';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { LanguageCode } from '@/lib/i18n/languages';
 import {
   Sparkles,
   Send,
@@ -39,6 +41,7 @@ interface ChatMsg {
 }
 
 export default function AssistantPage() {
+  const { language: currentLangCode, currentLanguage, supportedLanguages, setLanguage: setGlobalLanguage, t } = useLanguage();
   const [messages, setMessages] = useState<ChatMsg[]>([
     {
       role: 'assistant',
@@ -48,11 +51,11 @@ export default function AssistantPage() {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState('English');
   const [detailLevel, setDetailLevel] = useState<'SIMPLE' | 'DETAILED'>('SIMPLE');
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
 
   const suggestedPrompts = [
     'What was my hemoglobin?',
@@ -89,7 +92,7 @@ export default function AssistantPage() {
         method: 'POST',
         body: JSON.stringify({
           message: query,
-          language,
+          language: currentLanguage.name,
           detailLevel,
         }),
       });
@@ -129,10 +132,10 @@ export default function AssistantPage() {
         <div>
           <h1 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-emerald-600" />
-            <span>AI Clinical Copilot</span>
+            <span>{t.assistantTitle}</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Strictly grounded in your authorized medical records &bull; Zero autonomous diagnosis
+            {t.assistantSubtitle}
           </p>
         </div>
 
@@ -141,13 +144,13 @@ export default function AssistantPage() {
           <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-1 text-xs">
             <Languages className="w-3.5 h-3.5 text-slate-400 ml-1" />
             <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="bg-transparent border-0 text-xs font-medium text-slate-700 focus:ring-0 cursor-pointer pr-2"
+              value={currentLangCode}
+              onChange={(e) => setGlobalLanguage(e.target.value as LanguageCode)}
+              className="bg-transparent border-0 text-xs font-semibold text-slate-800 focus:ring-0 cursor-pointer pr-2"
             >
-              {['English', 'Hindi', 'Tamil', 'Telugu', 'Marathi', 'Bengali'].map((l) => (
-                <option key={l} value={l}>
-                  {l}
+              {supportedLanguages.map((l) => (
+                <option key={l.code} value={l.code}>
+                  {l.flag} {l.nativeName} ({l.name})
                 </option>
               ))}
             </select>
@@ -276,7 +279,7 @@ export default function AssistantPage() {
       {/* SUGGESTED PROMPTS & CHAT INPUT */}
       <div className="space-y-2 shrink-0 pt-2 border-t border-slate-200/80">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">Suggested:</span>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">{t.suggestedQuestions}:</span>
           {suggestedPrompts.map((p, i) => (
             <button
               key={i}
@@ -311,7 +314,7 @@ export default function AssistantPage() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about your lab results, medicines, or doctor notes..."
+            placeholder={t.askPlaceholder}
             className="flex-1 px-4 py-2.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
             disabled={loading}
           />

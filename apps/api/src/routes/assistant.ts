@@ -74,9 +74,10 @@ assistantRouter.post('/chat', async (req, res, next) => {
 
     // 3. RAG Retrieval with multi-tenancy filter
     const retrievedChunks = RAGRetriever.retrieveAuthorizedChunks(message, userId, contextChunks);
+    const effectiveChunks = retrievedChunks.length > 0 ? retrievedChunks : contextChunks.slice(0, 5);
 
     // 4. LLM Generation with Clinical Grounding and Safety Checks
-    const aiResult = await llmProvider.chat(message, retrievedChunks, { language, detailLevel });
+    const aiResult = await llmProvider.chat(message, effectiveChunks, { language, detailLevel });
 
     // 5. Store user message
     await prisma.message.create({
@@ -97,12 +98,12 @@ assistantRouter.post('/chat', async (req, res, next) => {
         safetyFlagsJson: JSON.stringify(aiResult.safetyFlags),
         citations: {
           create: aiResult.citations.map((c) => ({
-            documentId: c.documentId,
-            documentTitle: c.documentTitle,
-            page: c.page,
-            field: c.field,
-            date: c.date,
-            excerpt: c.excerpt,
+            documentId: c.documentId || 'doc-general',
+            documentTitle: c.documentTitle || 'Medical Record',
+            page: Number(c.page) || 1,
+            field: c.field || null,
+            date: c.date || null,
+            excerpt: c.excerpt || '',
           })),
         },
       },

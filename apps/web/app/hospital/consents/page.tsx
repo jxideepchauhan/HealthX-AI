@@ -35,7 +35,7 @@ export default function HospitalConsentsPage() {
   }, []);
 
   const filtered = consents.filter((c) =>
-    c.patientName.toLowerCase().includes(search.toLowerCase()) ||
+    (c.patientName || '').toLowerCase().includes(search.toLowerCase()) ||
     (c.recipientName && c.recipientName.toLowerCase().includes(search.toLowerCase())) ||
     (c.purpose && c.purpose.toLowerCase().includes(search.toLowerCase()))
   );

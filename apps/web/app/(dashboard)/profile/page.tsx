@@ -92,14 +92,14 @@ export default function ProfilePage() {
           <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             <Input
               label="Full Legal Name"
-              value={profile.name}
+              value={profile.name || ''}
               onChange={(e) => setProfile({ ...profile, name: e.target.value })}
               required
             />
             <Input
               label="Date of Birth"
               type="date"
-              value={profile.dob}
+              value={profile.dob || ''}
               onChange={(e) => setProfile({ ...profile, dob: e.target.value })}
               required
             />
@@ -108,7 +108,7 @@ export default function ProfilePage() {
                 Biological Sex
               </label>
               <select
-                value={profile.sex}
+                value={profile.sex || 'Male'}
                 onChange={(e) => setProfile({ ...profile, sex: e.target.value })}
                 className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs"
               >
@@ -119,30 +119,30 @@ export default function ProfilePage() {
             </div>
             <Input
               label="Blood Group"
-              value={profile.bloodGroup}
+              value={profile.bloodGroup || ''}
               onChange={(e) => setProfile({ ...profile, bloodGroup: e.target.value })}
               required
             />
             <Input
               label="Height (cm)"
               type="number"
-              value={profile.heightCm}
-              onChange={(e) => setProfile({ ...profile, heightCm: parseFloat(e.target.value) })}
+              value={profile.heightCm ?? ''}
+              onChange={(e) => setProfile({ ...profile, heightCm: e.target.value === '' ? '' : parseFloat(e.target.value) || 0 })}
             />
             <Input
               label="Weight (kg)"
               type="number"
-              value={profile.weightKg}
-              onChange={(e) => setProfile({ ...profile, weightKg: parseFloat(e.target.value) })}
+              value={profile.weightKg ?? ''}
+              onChange={(e) => setProfile({ ...profile, weightKg: e.target.value === '' ? '' : parseFloat(e.target.value) || 0 })}
             />
             <Input
               label="Geographic Location"
-              value={profile.location}
+              value={profile.location || ''}
               onChange={(e) => setProfile({ ...profile, location: e.target.value })}
             />
             <Input
               label="Preferred Language"
-              value={profile.preferredLanguage}
+              value={profile.preferredLanguage || ''}
               onChange={(e) => setProfile({ ...profile, preferredLanguage: e.target.value })}
             />
           </CardContent>

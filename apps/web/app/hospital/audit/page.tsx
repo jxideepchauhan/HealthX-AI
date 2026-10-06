@@ -35,8 +35,8 @@ export default function HospitalAuditPage() {
   }, []);
 
   const filtered = logs.filter((l) =>
-    l.action.toLowerCase().includes(search.toLowerCase()) ||
-    l.resource.toLowerCase().includes(search.toLowerCase()) ||
+    (l.action || '').toLowerCase().includes(search.toLowerCase()) ||
+    (l.resource || '').toLowerCase().includes(search.toLowerCase()) ||
     (l.user?.identifier && l.user.identifier.toLowerCase().includes(search.toLowerCase())) ||
     (l.user?.uniqueId && l.user.uniqueId.toLowerCase().includes(search.toLowerCase()))
   );

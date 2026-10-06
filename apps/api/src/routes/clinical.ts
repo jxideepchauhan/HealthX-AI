@@ -6,6 +6,15 @@ import type { DoctorVisitBrief } from '@healthx/types';
 
 export const clinicalRouter = Router();
 
+function safeJsonParse<T>(val: string | null | undefined, fallback: T): T {
+  if (!val) return fallback;
+  try {
+    return JSON.parse(val);
+  } catch {
+    return fallback;
+  }
+}
+
 clinicalRouter.use(authMiddleware);
 
 // POST /api/v1/doctor-visit/brief (Doctor Visit Mode - Section 41)
@@ -55,7 +64,7 @@ clinicalRouter.post('/doctor-visit/brief', async (req, res, next) => {
         age: 18,
         sex: user?.profile?.sex || 'Male',
         bloodGroup: user?.profile?.bloodGroup || 'A+',
-        knownAllergies: JSON.parse(user?.profile?.allergiesJson || '["Unknown"]'),
+        knownAllergies: safeJsonParse<string[]>(user?.profile?.allergiesJson, ['Unknown']),
         vitalSummary,
       },
       recentEncounters: encounters.map((e) => ({
@@ -137,7 +146,7 @@ clinicalRouter.post('/health-summary', async (req, res, next) => {
         name: user?.profile?.name,
         dob: user?.profile?.dob,
         bloodGroup: user?.profile?.bloodGroup,
-        allergies: JSON.parse(user?.profile?.allergiesJson || '[]'),
+        allergies: safeJsonParse<string[]>(user?.profile?.allergiesJson, []),
         importantInfo: user?.profile?.importantMedicalInformation,
       },
       laboratoryFindings: labs.map((l) => ({

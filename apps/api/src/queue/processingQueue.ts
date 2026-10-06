@@ -5,14 +5,16 @@
  */
 
 import { prisma } from '@healthx/database';
-import { LocalOCRProvider } from '../providers/ocr';
+import { RemoteOCRProvider } from '../providers/ocr';
+import { LocalStorageProvider } from '../providers/storage';
 import { normalizeLabTestName, normalizeUnit, determineLabStatus } from '@healthx/shared';
 import { RAGRetriever } from '@healthx/ai';
 
 export class ProcessingQueue {
   private static instance: ProcessingQueue;
   private isProcessing = false;
-  private ocrProvider = new LocalOCRProvider();
+  private ocrProvider = new RemoteOCRProvider();
+  private storageProvider = new LocalStorageProvider();
 
   public static getInstance(): ProcessingQueue {
     if (!ProcessingQueue.instance) {
@@ -51,8 +53,16 @@ export class ProcessingQueue {
       data: { status: 'PROCESSING', stage: 'OCR' },
     });
 
+    let fileBuffer: Buffer = Buffer.from(doc.title + '\n' + doc.fileName);
+    try {
+      const stored = await this.storageProvider.getFile(doc.storageKey);
+      fileBuffer = Buffer.from(stored);
+    } catch {
+      // Fall back to title + fileName if file buffer missing
+    }
+
     const ocrResult = await this.ocrProvider.extractText(
-      Buffer.from(doc.title + '\n' + doc.fileName),
+      fileBuffer,
       doc.mimeType,
       doc.fileName
     );
@@ -195,7 +205,19 @@ export class ProcessingQueue {
       });
 
       if (nextJob) {
-        await this.processDocument(nextJob.documentId);
+        try {
+          await this.processDocument(nextJob.documentId);
+        } catch (jobErr: any) {
+          console.error(`Job processing failed for document ${nextJob.documentId}:`, jobErr);
+          await prisma.processingJob.updateMany({
+            where: { documentId: nextJob.documentId },
+            data: { status: 'FAILED', stage: 'ERROR' },
+          });
+          await prisma.document.update({
+            where: { id: nextJob.documentId },
+            data: { processingStatus: 'FAILED' },
+          });
+        }
       }
     } catch (err) {
       console.error('Job Queue Error:', err);

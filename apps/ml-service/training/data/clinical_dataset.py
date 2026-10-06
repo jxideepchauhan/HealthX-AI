@@ -1,29 +1,35 @@
 """
-HealthX AI - Enriched Clinical Training Dataset
+HealthX AI - Enriched Clinical Training Dataset (Healthcare Specialized)
 Curated multi-class clinical corpus for document classification and medical NER.
+Spans Hematology, Endocrinology, Cardiology, Nephrology, Gastroenterology,
+Pulmonology, Oncology, Pediatrics, Critical Care, and Radiology.
 All records are marked with data_origin: SYNTHETIC_TEST.
 """
 
-# 120+ Diverse Clinical Documents covering 8 Medical Classes
 CLINICAL_DOCUMENTS_CORPUS = [
-    # --- LAB REPORTS ---
-    ("LABORATORY MEDICINE REPORT: Complete Blood Count (CBC). Hemoglobin: 10.8 g/dL (Ref: 13.0 - 17.0), RBC: 4.1 million/uL, Ferritin: 12 ng/mL. WBC: 7200 /uL. Platelets: 310000 /uL. MCV: 76 fL.", "LAB_REPORT"),
-    ("CLINICAL BIOCHEMISTRY: Fasting Blood Sugar (FBS): 118 mg/dL (Ref: 70 - 99), Post Prandial Glucose: 165 mg/dL, HbA1c: 6.8% (Ref: < 5.7). Consistent with early Type 2 Diabetes.", "LAB_REPORT"),
-    ("LIPID PROFILE PANEL: Total Cholesterol: 242 mg/dL (Desirable: < 200), Triglycerides: 195 mg/dL, HDL Cholesterol: 38 mg/dL, LDL Cholesterol: 165 mg/dL. Hyperlipidemia noted.", "LAB_REPORT"),
-    ("RENAL FUNCTION TEST (KFT): Blood Urea Nitrogen: 18 mg/dL, Serum Creatinine: 1.1 mg/dL (Ref: 0.7 - 1.3), Serum Uric Acid: 5.6 mg/dL, eGFR: 88 mL/min/1.73m2.", "LAB_REPORT"),
-    ("LIVER FUNCTION PANEL (LFT): Total Bilirubin: 0.9 mg/dL, Direct Bilirubin: 0.2 mg/dL, SGOT (AST): 28 U/L, SGPT (ALT): 32 U/L, Alkaline Phosphatase: 85 U/L, Total Protein: 7.2 g/dL.", "LAB_REPORT"),
+    # --- 1. LAB REPORTS ---
+    ("LABORATORY MEDICINE REPORT: Complete Blood Count (CBC). Hemoglobin: 10.8 g/dL (Ref: 13.0 - 17.0), RBC: 4.1 million/uL, Ferritin: 12 ng/mL. WBC: 7200 /uL. Platelets: 310000 /uL. MCV: 76 fL. MCH: 26 pg. MCHC: 31 g/dL. RDW: 16.2%.", "LAB_REPORT"),
+    ("CLINICAL BIOCHEMISTRY: Fasting Blood Sugar (FBS): 118 mg/dL (Ref: 70 - 99), Post Prandial Glucose: 165 mg/dL, HbA1c: 6.8% (Ref: < 5.7). Consistent with early Type 2 Diabetes Mellitus.", "LAB_REPORT"),
+    ("LIPID PROFILE PANEL: Total Cholesterol: 242 mg/dL (Desirable: < 200), Triglycerides: 195 mg/dL, HDL Cholesterol: 38 mg/dL, LDL Cholesterol: 165 mg/dL, VLDL: 39 mg/dL. Hyperlipidemia noted.", "LAB_REPORT"),
+    ("RENAL FUNCTION TEST (KFT/RFT): Blood Urea Nitrogen: 18 mg/dL, Serum Creatinine: 1.1 mg/dL (Ref: 0.7 - 1.3), Serum Uric Acid: 5.6 mg/dL, eGFR: 88 mL/min/1.73m2. Intact renal clearance.", "LAB_REPORT"),
+    ("LIVER FUNCTION PANEL (LFT): Total Bilirubin: 0.9 mg/dL, Direct Bilirubin: 0.2 mg/dL, SGOT (AST): 28 U/L, SGPT (ALT): 32 U/L, Alkaline Phosphatase: 85 U/L, Total Protein: 7.2 g/dL, Albumin: 4.1 g/dL.", "LAB_REPORT"),
     ("THYROID STIMULATING HORMONE (TSH) ASSAY: Serum TSH: 6.85 uIU/mL (Ref: 0.45 - 4.50), Free T3: 2.8 pg/mL, Free T4: 1.1 ng/dL. Impression: Subclinical Hypothyroidism.", "LAB_REPORT"),
-    ("URINE ROUTINE & MICROSCOPY: Specific Gravity: 1.020, pH: 6.0, Protein: Nil, Glucose: Nil, Ketones: Negative, Pus cells: 1-2 /hpf, Red blood cells: Nil, Casts: None.", "LAB_REPORT"),
-    ("SERUM ELECTROLYTE PANEL: Sodium: 138 mEq/L (Ref: 135 - 145), Potassium: 4.2 mEq/L (Ref: 3.5 - 5.0), Chloride: 102 mEq/L, Bicarbonate: 24 mEq/L.", "LAB_REPORT"),
-    ("HEMATOLOGY: Iron Studies. Serum Iron: 42 ug/dL (Ref: 60 - 170), Total Iron Binding Capacity (TIBC): 420 ug/dL (Ref: 240 - 450), Transferrin Saturation: 10%.", "LAB_REPORT"),
-    ("COAGULATION PROFILE: Prothrombin Time (PT): 12.2 sec, INR: 1.05 (Ref: 0.8 - 1.2), Activated Partial Thromboplastin Time (aPTT): 29.5 sec.", "LAB_REPORT"),
-    ("CARDIAC BIOMARKERS REPORT: High Sensitivity Troponin I: < 2.5 ng/L (Ref: < 14), CK-MB: 12 U/L, NT-proBNP: 68 pg/mL.", "LAB_REPORT"),
-    ("SEROLOGY & INFECTIOUS DISEASE: Dengue NS1 Antigen: Negative, Dengue IgM: Negative, Malaria Smear (MP): No parasites seen, Widal Test: Non-reactive.", "LAB_REPORT"),
-    ("VITAMIN PROFILE: 25-Hydroxy Vitamin D: 16.5 ng/mL (Deficiency: < 20), Vitamin B12: 185 pg/mL (Borderline: 200 - 900).", "LAB_REPORT"),
-    ("SERUM IMMUNOLOGY: C-Reactive Protein (Quantitative CRP): 2.4 mg/L (Ref: < 5.0), Erythrocyte Sedimentation Rate (ESR): 18 mm/hr.", "LAB_REPORT"),
-    ("ARTERIAL BLOOD GAS (ABG): pH: 7.41, pCO2: 38 mmHg, pO2: 92 mmHg, HCO3: 23.8 mEq/L, SaO2: 98% on room air.", "LAB_REPORT"),
+    ("URINE ROUTINE & MICROSCOPY: Specific Gravity: 1.020, pH: 6.0, Protein: Nil, Glucose: Nil, Ketones: Negative, Pus cells: 1-2 /hpf, Red blood cells: Nil, Epithelial cells: Occasional.", "LAB_REPORT"),
+    ("SERUM ELECTROLYTE PANEL: Sodium: 138 mEq/L (Ref: 135 - 145), Potassium: 4.2 mEq/L (Ref: 3.5 - 5.0), Chloride: 102 mEq/L, Bicarbonate: 24 mEq/L, Calcium: 9.4 mg/dL.", "LAB_REPORT"),
+    ("HEMATOLOGY: Iron Studies. Serum Iron: 42 ug/dL (Ref: 60 - 170), Total Iron Binding Capacity (TIBC): 420 ug/dL (Ref: 240 - 450), Transferrin Saturation: 10%. Consistent with iron deficiency.", "LAB_REPORT"),
+    ("COAGULATION PROFILE: Prothrombin Time (PT): 12.2 sec, INR: 1.05 (Ref: 0.8 - 1.2), Activated Partial Thromboplastin Time (aPTT): 29.5 sec. Normal hemostatic parameters.", "LAB_REPORT"),
+    ("CARDIAC BIOMARKERS REPORT: High Sensitivity Troponin I: < 2.5 ng/L (Ref: < 14), CK-MB: 12 U/L, NT-proBNP: 68 pg/mL. No biochemical evidence of acute myocardial necrosis.", "LAB_REPORT"),
+    ("SEROLOGY & INFECTIOUS DISEASE: Dengue NS1 Antigen: Negative, Dengue IgM: Negative, Malaria Smear (MP): No parasites seen, Widal Test: Non-reactive, Chikungunya IgM: Negative.", "LAB_REPORT"),
+    ("VITAMIN & NUTRITIONAL PROFILE: 25-Hydroxy Vitamin D: 16.5 ng/mL (Deficiency: < 20), Vitamin B12: 185 pg/mL (Borderline: 200 - 900), Serum Folate: 7.8 ng/mL.", "LAB_REPORT"),
+    ("SERUM IMMUNOLOGY: C-Reactive Protein (Quantitative CRP): 2.4 mg/L (Ref: < 5.0), Erythrocyte Sedimentation Rate (ESR): 18 mm/hr, Rheumatoid Factor (RF): < 10 IU/mL.", "LAB_REPORT"),
+    ("ARTERIAL BLOOD GAS (ABG): pH: 7.41, pCO2: 38 mmHg, pO2: 92 mmHg, HCO3: 23.8 mEq/L, Base Excess: -0.5, SaO2: 98% on room air. Normal acid-base balance.", "LAB_REPORT"),
+    ("GLYCATED HEMOGLOBIN REPORT: HbA1c: 7.4% (Estimated Average Glucose: 165 mg/dL). High risk diabetic range requiring lifestyle and pharmacological intervention.", "LAB_REPORT"),
+    ("RENAL BIOMARKERS & URINARY MICROALBUMIN: Urine Albumin-to-Creatinine Ratio (UACR): 18 mg/g (Normal: < 30). No microalbuminuria detected.", "LAB_REPORT"),
+    ("SERUM PROTEIN ELECTROPHORESIS (SPEP): Total Protein: 7.1 g/dL, Albumin: 60.2%, Alpha-1: 3.1%, Alpha-2: 9.8%, Beta: 11.4%, Gamma: 15.5%. No M-band spike observed.", "LAB_REPORT"),
+    ("SERUM CALCIUM & BONE PANEL: Serum Calcium: 9.1 mg/dL, Ionized Calcium: 4.8 mg/dL, Serum Phosphorus: 3.4 mg/dL, Intact PTH: 42 pg/mL (Ref: 15 - 65).", "LAB_REPORT"),
+    ("DIAGNOSTIC MICROBIOLOGY & SPUTUM CULTURE: Gram stain: Gram-positive diplococci present. Culture: Streptococcus pneumoniae sensitive to Amoxicillin, Levofloxacin.", "LAB_REPORT"),
 
-    # --- PRESCRIPTIONS ---
+    # --- 2. PRESCRIPTIONS ---
     ("Rx: Tab. Ferrous Ascorbate 100mg + Folic Acid 1.5mg. 1 tablet once daily after dinner x 60 days. Take with water. Dr. Raskik, MD. Namo Hospital.", "PRESCRIPTION"),
     ("PRESCRIPTION: Tab. Metformin 500mg - 1 tab twice daily with meals. Tab. Glimepiride 1mg - 1 tab before breakfast. Dr. Anita Sharma, Endocrinologist.", "PRESCRIPTION"),
     ("Rx: Tab. Telmisartan 40mg once daily in the morning for hypertension. Tab. Amlodipine 5mg OD. Review BP in 2 weeks. Namo Hospital OPD.", "PRESCRIPTION"),
@@ -38,9 +44,14 @@ CLINICAL_DOCUMENTS_CORPUS = [
     ("PRESCRIPTION: Cap. Vitamin D3 60,000 IU - 1 capsule weekly for 8 weeks with milk. Tab. Calcium Carbonate 500mg - 1 tab daily after lunch.", "PRESCRIPTION"),
     ("Rx: Tab. Azithromycin 500mg - 1 tablet once daily x 3 days. Tab. Zincovit 1 tab OD x 30 days. Dr. Raskik, Internal Medicine.", "PRESCRIPTION"),
     ("MEDICAL ORDER: Tab. Losartan Potassium 50mg - 1 tab morning daily. Tab. Hydrochlorothiazide 12.5mg OD. Monitor serum electrolytes.", "PRESCRIPTION"),
-    ("Rx: Tab. Cefixime 200mg - 1 tablet twice daily for 5 days. Probiotic capsules twice daily.", "PRESCRIPTION"),
+    ("Rx: Tab. Cefixime 200mg - 1 tablet twice daily for 5 days. Probiotic capsules twice daily with meals.", "PRESCRIPTION"),
+    ("PRESCRIPTION: Tab. Rosuvastatin 10mg - 1 tablet at night. Tab. Ezetimibe 10mg OD. Low fat diet advised. Dr. Rajesh Kumar, Namo Heart Center.", "PRESCRIPTION"),
+    ("Rx: Inhaler Formoterol 6mcg + Budesonide 400mcg - 2 puffs twice daily using spacer. Tab. Acebrophylline 100mg BD x 14 days. Pulmonology OPD.", "PRESCRIPTION"),
+    ("OUTPATIENT PHARMACY RX: Tab. Dapagliflozin 10mg - 1 tab morning. Tab. Sitagliptin 100mg OD. Ensure adequate hydration.", "PRESCRIPTION"),
+    ("Rx: Tab. Escitalopram 10mg - 1 tab at bedtime x 30 days. Tab. Clonazepam 0.25mg SOS for severe panic symptoms. Do not abruptly discontinue.", "PRESCRIPTION"),
+    ("PRESCRIPTION: Tab. Ursodeoxycholic Acid (UDCA) 300mg - 1 tablet twice daily with food x 90 days. Liver Clinic, Namo Hospital.", "PRESCRIPTION"),
 
-    # --- CONSULTATION NOTES ---
+    # --- 3. CONSULTATION NOTES ---
     ("OUTPATIENT CONSULTATION NOTE: Patient Isaac Richard Noronha presented with complaints of chronic fatigue, dizziness on standing, and cold intolerance for 3 weeks. Dr. Raskik. BP: 120/78, Pulse: 74 bpm. Pallor present.", "CONSULTATION"),
     ("SPECIALIST CLINICAL NOTE: 45-year-old female evaluated for recurrent epigastric pain, bloating, and postprandial fullness. Abdomen soft, non-tender. Advised upper GI endoscopy and H. pylori stool antigen.", "CONSULTATION"),
     ("PEDIATRIC CLINICAL ASSESSMENT: 4-year-old child brought for routine developmental milestone examination and nutritional assessment. Height: 102 cm, Weight: 15.5 kg. Growth parameters on 50th percentile.", "CONSULTATION"),
@@ -55,8 +66,14 @@ CLINICAL_DOCUMENTS_CORPUS = [
     ("RHEUMATOLOGY OPD NOTE: Evaluation of symmetric small joint polyarthralgia involving MCP and PIP joints of hands with 45 minutes of morning stiffness. Ordered RF, Anti-CCP, and ESR.", "CONSULTATION"),
     ("ENDOCRINOLOGY FOLLOW-UP: Diabetes review. Fasting blood sugar log shows average of 112 mg/dL. Foot exam normal with intact monofilament sensation. Urine microalbumin negative.", "CONSULTATION"),
     ("SURGICAL OPD CONSULTATION: Clinical review of right inguinal swelling reducible on lying down with positive cough impulse. Diagnosis: Uncomplicated right indirect inguinal hernia. Advised elective mesh repair.", "CONSULTATION"),
+    ("GERIATRIC MEDICINE CONSULT: 76-year-old male evaluated for gait unsteadiness, polypharmacy review, and cognitive screening (MMSE score 27/30). Vitamin B12 and TSH ordered.", "CONSULTATION"),
+    ("UROLOGY CONSULTATION: 64-year-old male presenting with nocturia x 3 times, weak stream, and hesitancy. Digital rectal examination: enlarged, smooth, non-tender prostate. Serum PSA: 1.8 ng/mL.", "CONSULTATION"),
+    ("NEPHROLOGY CLINIC NOTE: Follow-up of Stage 2 CKD secondary to diabetic nephropathy. Stable eGFR at 74 mL/min. Blood pressure well controlled at 126/82 mmHg on ACE inhibitor.", "CONSULTATION"),
+    ("GYNECOLOGY CONSULTATION: 32-year-old female presenting with irregular menstrual cycles and hirsutism. Pelvic ultrasound reveals bilateral polycystic ovaries. Diagnosis: PCOS.", "CONSULTATION"),
+    ("ALLERGY & IMMUNOLOGY NOTE: Skin prick testing performed for aeroallergens. Strong positive reaction to dust mites (Dermatophagoides pteronyssinus). Sublingual immunotherapy discussed.", "CONSULTATION"),
+    ("HEMATOLOGY CLINICAL REVIEW: Evaluation of microcytic hypochromic anemia in young adult male. Repeat CBC after 6-week oral iron shows hemoglobin rise from 10.8 to 13.5 g/dL.", "CONSULTATION"),
 
-    # --- DISCHARGE SUMMARIES ---
+    # --- 4. DISCHARGE SUMMARIES ---
     ("DISCHARGE SUMMARY: Patient Isaac Richard Noronha admitted on 12/09/2026, discharged on 15/09/2026. Diagnosis: Severe iron-deficiency anemia. Hospital Course: Received IV iron sucrose, tolerated well. Condition at discharge: Stable, vitals normal.", "DISCHARGE_SUMMARY"),
     ("INPATIENT DISCHARGE SUMMARY: 62-year-old female admitted with acute exacerbation of COPD. Received nebulizations, IV steroids, and supplemental oxygen. Arterial blood gas stabilized. Discharged on inhaler therapy.", "DISCHARGE_SUMMARY"),
     ("SURGICAL DISCHARGE SUMMARY: Laparoscopic Appendectomy performed on 04/09/2026 for acute catarrhal appendicitis. Post-operative course uneventful. Oral intake resumed. Wound clean and dry. Suture removal on post-op day 8.", "DISCHARGE_SUMMARY"),
@@ -67,8 +84,18 @@ CLINICAL_DOCUMENTS_CORPUS = [
     ("NEPHROLOGY DISCHARGE SUMMARY: Patient admitted for acute kidney injury secondary to dehydration. Serum creatinine decreased from 3.2 mg/dL to baseline 1.1 mg/dL following volume repletion. Discharged in stable state.", "DISCHARGE_SUMMARY"),
     ("ORTHOPEDIC POST-OP DISCHARGE: Total Knee Arthroplasty (Right). Physical therapy initiated, patient ambulating with walker support. Deep vein thrombosis prophylaxis administered. Wound healing satisfactory.", "DISCHARGE_SUMMARY"),
     ("TRAUMA UNIT DISCHARGE SUMMARY: Blunt abdominal trauma following road traffic accident. CT scan showed Grade I splenic laceration managed conservatively without laparotomy. Serial hemoglobin stable. Discharged home.", "DISCHARGE_SUMMARY"),
+    ("STROKE UNIT DISCHARGE SUMMARY: 68-year-old male admitted with acute ischemic stroke (left MCA territory). Underwent IV thrombolysis with Tenecteplase. NIHSS improved from 8 to 2. Discharged on Aspirin and Statin.", "DISCHARGE_SUMMARY"),
+    ("GASTROENTEROLOGY DISCHARGE: Patient admitted with acute calculous cholecystitis. Managed with IV antibiotics and supportive care. Elective laparoscopic cholecystectomy planned in 6 weeks.", "DISCHARGE_SUMMARY"),
+    ("ENDOCRINE ICU DISCHARGE: 24-year-old admitted in Diabetic Ketoacidosis (DKA). Resolved after IV insulin infusion and electrolyte replacement. Discharged on basal-bolus insulin regimen.", "DISCHARGE_SUMMARY"),
+    ("INFECTIOUS DISEASE DISCHARGE NOTE: Enteric fever (Salmonella Typhi bacteremia). Received 7-day course of IV Ceftriaxone. Blood cultures at discharge sterile. Afebrile x 72 hours.", "DISCHARGE_SUMMARY"),
+    ("BURN CARE UNIT DISCHARGE SUMMARY: 15% superficial partial-thickness thermal burns to upper limbs. Treated with collagen dressing and silver sulfadiazine. Epithelialization complete.", "DISCHARGE_SUMMARY"),
+    ("UROLOGICAL POST-OP DISCHARGE: Transurethral Resection of Prostate (TURP). Foley catheter removed on post-op day 3. Clear urine output, no hematuria. Discharged on Tamsulosin.", "DISCHARGE_SUMMARY"),
+    ("NEUROSURGICAL DISCHARGE: Microdiscectomy L4-L5 for lumbar disc herniation and severe sciatica. Radicular pain relieved immediately post-surgery. Discharged with lumbar corset.", "DISCHARGE_SUMMARY"),
+    ("CARDIOTHORACIC DISCHARGE SUMMARY: Coronary Artery Bypass Grafting (CABG x 3 vessels). Extubated at 6 hours post-op. Sternal incision healing well. Cardiac rehabilitation initiated.", "DISCHARGE_SUMMARY"),
+    ("GYNECOLOGICAL POST-OP DISCHARGE: Total Laparoscopic Hysterectomy with bilateral salpingo-oophorectomy for multiple uterine fibroids. Histopathology benign. Discharged stable.", "DISCHARGE_SUMMARY"),
+    ("ONCOLOGY INPATIENT DISCHARGE: Completed Cycle 4 adjuvant chemotherapy (AC-T regimen) for early-stage breast cancer. Nadir blood counts monitored. Discharged with antiemetic support.", "DISCHARGE_SUMMARY"),
 
-    # --- DIAGNOSTIC & IMAGING REPORTS ---
+    # --- 5. DIAGNOSTIC & IMAGING REPORTS ---
     ("DIAGNOSTIC RADIOLOGY REPORT: Ultrasound Whole Abdomen and Pelvis. Liver is normal in size (13.8 cm) with homogenous echotexture. Gall bladder thin-walled, no calculi. Kidneys, spleen, pancreas unremarkable. Urinary bladder normal.", "DIAGNOSTIC_REPORT"),
     ("CHEST RADIOGRAPH (PA VIEW): Lung fields appear clear without focal consolidation, cavitation, or pleural effusion. Cardiopulmonary silhouette is within normal limits. Bony thorax and bilateral domes of diaphragm intact.", "DIAGNOSTIC_REPORT"),
     ("MRI BRAIN (PLAIN & CONTRAST): No evidence of acute territorial infarction or hemorrhage. Ventricular system, basal cisterns, and cerebral sulci are normal for age. No intracranial space-occupying lesion.", "DIAGNOSTIC_REPORT"),
@@ -79,26 +106,80 @@ CLINICAL_DOCUMENTS_CORPUS = [
     ("DIGITAL MAMMOGRAPHY REPORT: Bilateral breast examination reveals scattered fibroglandular densities (BI-RADS Category 1: Negative). No suspicious microcalcifications, masses, or architectural distortions.", "DIAGNOSTIC_REPORT"),
     ("DUAL-ENERGY X-RAY ABSORPTIOMETRY (DEXA SCAN): Bone mineral density evaluation. Lumbar spine T-score: -1.2, Left femoral neck T-score: -1.4. Diagnosis: Osteopenia.", "DIAGNOSTIC_REPORT"),
     ("UPPER GASTROINTESTINAL ENDOSCOPY: Esophagus normal. Stomach mucosa shows mild antral erythema without ulceration or mass. Duodenal bulb and second part normal. Biopsy taken for H. pylori.", "DIAGNOSTIC_REPORT"),
+    ("HIGH-RESOLUTION CT CHEST (HRCT): No honeycombing, traction bronchiectasis, or ground-glass opacities. Tracheobronchial tree patent. No mediastinal or hilar lymphadenopathy.", "DIAGNOSTIC_REPORT"),
+    ("MRI LUMBAR SPINE: L4-L5 disc desiccation with diffuse posterior disc bulge indenting the thecal sac without focal nerve root impingement. L5-S1 disc preserved.", "DIAGNOSTIC_REPORT"),
+    ("CAROTID DOPPLER ULTRASOUND: Bilateral common carotid and internal carotid arteries show normal intimal-medial thickness. No hemodynamic flow-limiting plaque or stenosis.", "DIAGNOSTIC_REPORT"),
+    ("COLONOSCOPY REPORT: Cecum reached. Colonic mucosa normal throughout from rectum to cecum. No polyps, ulcerations, or diverticula identified. Hemorrhoids (Grade I) noted.", "DIAGNOSTIC_REPORT"),
+    ("CORONARY COMPUTED TOMOGRAPHY ANGIOGRAPHY (CCTA): Calcium score zero. No non-calcified plaques in left main, LAD, LCx, or RCA. Zero percent coronary luminal stenosis.", "DIAGNOSTIC_REPORT"),
+    ("PELVIC ULTRASOUND (TRANSVAGINAL): Uterus anteverted, normal dimensions (7.4 x 4.2 x 3.8 cm). Endometrial thickness 6.5 mm. Both ovaries appear normal with antral follicles.", "DIAGNOSTIC_REPORT"),
+    ("X-RAY BOTH KNEES (AP & LATERAL STANDING): Mild reduction of medial joint compartment space in right knee. Tibial spines sharp. No subchondral sclerosis or loose bodies.", "DIAGNOSTIC_REPORT"),
+    ("ELECTROENCEPHALOGRAPHY (EEG): Routine 30-minute waking recording shows well-organized 10 Hz posterior dominant alpha rhythm. No epileptiform discharges or focal slowing.", "DIAGNOSTIC_REPORT"),
+    ("WHOLE BODY 18F-FDG PET-CT: Physiologic tracer uptake in brain, myocardium, liver, and urinary tract. No hypermetabolic neoplastic lesions or metabolically active metastases.", "DIAGNOSTIC_REPORT"),
+    ("PULMONARY FUNCTION TEST (SPIROMETRY): FEV1: 3.2 L (94% predicted), FVC: 3.9 L (96% predicted), FEV1/FVC ratio: 82%. Normal ventilatory pattern without obstruction.", "DIAGNOSTIC_REPORT"),
 
-    # --- VACCINATION & IMMUNIZATION RECORDS ---
+    # --- 6. VACCINATION & IMMUNIZATION RECORDS ---
     ("IMMUNIZATION CERTIFICATE: Universal Immunization Programme record. Patient has received BCG, OPV 1-3, Pentavalent 1-3, Rotavirus, Measles-Rubella (MR) dose 1, and Japanese Encephalitis vaccine.", "VACCINATION_RECORD"),
     ("COVID-19 VACCINATION CERTIFICATE: Beneficiary Reference ID: 9872145892. Vaccine Name: COVISHIELD. Dose 1 Date: 14/05/2021. Dose 2 Date: 12/08/2021. Precaution Booster Dose administered on 22/01/2022.", "VACCINATION_RECORD"),
     ("INTERNATIONAL CERTIFICATE OF VACCINATION: Yellow Fever vaccine administered at Designated Public Health Center. Batch No: YF-88219. Valid from 10 days post injection for lifetime.", "VACCINATION_RECORD"),
     ("HEPATITIS B VACCINATION RECORD: 3-dose recombinant Hepatitis B immunization completed at 0, 1, and 6 months interval. Anti-HBs antibody titer post-series: 420 mIU/mL (Protective immunity confirmed).", "VACCINATION_RECORD"),
     ("ADULT IMMUNIZATION RECORD: Influenza seasonal quadrivalent vaccine administered. Pneumococcal conjugate vaccine (PCV13) given. Tdap booster administered.", "VACCINATION_RECORD"),
     ("HPV VACCINATION CARD: Human Papillomavirus 9-valent vaccine. Dose 1 administered on 15/01/2026. Dose 2 scheduled for 15/07/2026.", "VACCINATION_RECORD"),
+    ("CHILDS IMMUNIZATION PASSPORT: DTP Booster 1 administered at 18 months, OPV Booster given. Vitamin A solution 2 lakh IU administered orally.", "VACCINATION_RECORD"),
+    ("TYPHOID CONJUGATE VACCINE (TCV): Administered single intramuscular dose. Batch: TYP-9920. Protective efficacy documented for 5 years.", "VACCINATION_RECORD"),
+    ("RABIES POST-EXPOSURE PROPHYLAXIS CARD: Category II dog bite exposure. Purified Vero Cell Rabies Vaccine (PVRV) on days 0, 3, 7, and 14 completed. Rabies Immunoglobulin infiltrated.", "VACCINATION_RECORD"),
+    ("VARICELLA VACCINATION CARD: Live attenuated chickenpox vaccine. 2 doses administered 6 weeks apart. Solid immunity conferred.", "VACCINATION_RECORD"),
+    ("MENINGOCOCCAL VACCINE CERTIFICATE: Quadrivalent meningococcal conjugate vaccine (ACWY) administered for Hajj/travel clearance.", "VACCINATION_RECORD"),
+    ("PNEUMOCOCCAL IMMUNIZATION CARD: Prevnar-13 administered followed by Pneumovax-23 at 1 year interval for asplenic patient.", "VACCINATION_RECORD"),
+    ("HEPATITIS A IMMUNIZATION CARD: Inactivated Hepatitis A vaccine 2-dose series completed at 0 and 6 months. High titer anti-HAV antibodies.", "VACCINATION_RECORD"),
+    ("ROTA VIRUS IMMUNIZATION LOG: Live oral rotavirus vaccine pentavalent completed 3 doses at 6, 10, and 14 weeks.", "VACCINATION_RECORD"),
+    ("JAPANESE ENCEPHALITIS VACCINE CERTIFICATE: Live attenuated SA 14-14-2 vaccine single dose administered under vector-borne disease control program.", "VACCINATION_RECORD"),
+    ("MMR VACCINATION RECORD: Measles, Mumps, Rubella vaccine dose 2 administered at 5 years. Child protected against rubella syndrome.", "VACCINATION_RECORD"),
+    ("POLIO VACCINATION CERTIFICATE: Inactivated Polio Vaccine (IPV) fractional doses administered intradermally at 6 and 14 weeks.", "VACCINATION_RECORD"),
+    ("TETANUS TOXOID RECORD: TT booster administered following puncture wound on right foot. Last prior booster was 8 years ago.", "VACCINATION_RECORD"),
+    ("HERPES ZOSTER (SHINGLES) VACCINE: Recombinant zoster vaccine (Shingrix) 2-dose series completed for adult aged 55 years.", "VACCINATION_RECORD"),
+    ("CHOLERA VACCINE TRAVEL RECORD: Oral killed whole-cell cholera vaccine 2 doses taken 2 weeks apart before travel to endemic region.", "VACCINATION_RECORD"),
 
-    # --- MEDICAL CERTIFICATES ---
+    # --- 7. MEDICAL CERTIFICATES ---
     ("MEDICAL FITNESS CERTIFICATE: This is to certify that I have examined Mr. Isaac Richard Noronha, aged 18 years, and find him free from any communicable disease, physically and mentally fit for educational enrollment.", "MEDICAL_CERTIFICATE"),
     ("MEDICAL LEAVE CERTIFICATE: Certified that Mr. John Doe is suffering from Acute Gastroenteritis and is under my treatment. Advised bed rest and temporary absence from duties from 10/10/2026 to 14/10/2026.", "MEDICAL_CERTIFICATE"),
     ("CERTIFICATE OF SICKNESS AND FITNESS: Patient was unfit for work due to Viral Pyrexia from 01/09/2026 to 05/09/2026. Examined today and certified fit to resume normal employment duties from 06/09/2026.", "MEDICAL_CERTIFICATE"),
     ("MEDICAL CERTIFICATE FOR DRIVER'S LICENCE: Vision test 6/6 bilateral with glasses, color blindness negative, hearing within normal limits. Certified fit to operate motor vehicle.", "MEDICAL_CERTIFICATE"),
     ("DISABILITY EVALUATION CERTIFICATE: Permanent physical impairment assessment following orthopedic board evaluation. Total calculated impairment 22% of right lower limb.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL CERTIFICATE FOR AIR TRAVEL (FIT TO FLY): Certified that passenger with 32 weeks uncomplicated singleton pregnancy is medically stable and fit for commercial air travel.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL CONVALESCENCE CERTIFICATE: Certified that patient underwent elective inguinal hernia repair and requires 2 weeks of restricted heavy physical lifting.", "MEDICAL_CERTIFICATE"),
+    ("PRE-EMPLOYMENT MEDICAL EXAMINATION CERTIFICATE: Chest X-ray clear, ECG normal, blood sugar normal, audiometry normal. Medically qualified for industrial employment.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL EXEMPTION CERTIFICATE: Certified that student has severe bronchial asthma and is medically exempt from strenuous outdoor athletic cross-country running during winter.", "MEDICAL_CERTIFICATE"),
+    ("MENTAL HEALTH FITNESS CERTIFICATE: Certified that individual is free from any acute psychosis or cognitive disorder and is mentally competent to execute legal will.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL CERTIFICATE FOR PILOT CLEARANCE: Class 2 aviation medical assessment completed. Audiogram normal, visual fields full, ECG within limits. Certified fit.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL CERTIFICATE FOR GYM & SPORTS PARTICIPATION: Cardiac evaluation and resting vitals normal. No contraindication for moderate-to-vigorous resistance physical training.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL QUARANTINE COMPLETION CERTIFICATE: Patient completed 10-day isolation period for chickenpox infection. All skin lesions crusted and non-infectious. Certified fit.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL CERTIFICATE FOR FOOD HANDLER: Stool examination negative for Salmonella, ova, and cysts. Chest X-ray negative for active tuberculosis. Certified fit to handle food.", "MEDICAL_CERTIFICATE"),
+    ("OPTOMETRIC VISION CERTIFICATE: Best corrected visual acuity (BCVA) 20/20 in both eyes. Intraocular pressure normal. Contrast sensitivity adequate.", "MEDICAL_CERTIFICATE"),
+    ("TEMPORARY MEDICAL UNFITNESS CERTIFICATE: Certified that patient is suffering from acute lumbar disc strain and is unable to attend university examinations on 14/10/2026.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL CERTIFICATE FOR BLOOD DONATION: Hemoglobin 14.2 g/dL, blood pressure 118/76, pulse 70, weight 68 kg. Cleared as voluntary blood donor.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL CERTIFICATE FOR ADOPTION APPLICANT: Both applicants medically examined. Free from chronic debilitating illness or shortened life expectancy. Certified fit.", "MEDICAL_CERTIFICATE"),
+    ("CHILD HEALTH EXAMINATION CERTIFICATE: Child examined for school admission. Vitals normal, speech and hearing age-appropriate, immunization up to date.", "MEDICAL_CERTIFICATE"),
+    ("MEDICAL CERTIFICATE FOR SCUBA DIVING: Tympanic membranes intact, no history of spontaneous pneumothorax, pulmonary function normal. Cleared for recreational diving.", "MEDICAL_CERTIFICATE"),
 
-    # --- OTHER / ADMINISTRATIVE / BILLING ---
+    # --- 8. OTHER / ADMINISTRATIVE / BILLING ---
     ("HOSPITAL INPATIENT FINAL BILL: Namo Hospital & Research Center. Total Bill Amount: INR 48,500. Room charges, pharmacy supplies, investigation fees, physician consultation charges. Payment mode: TPA Health Insurance.", "OTHER"),
     ("INSURANCE CLAIM PRE-AUTHORIZATION FORM: Cashless hospitalization request submitted to Star Health Insurance TPA. Policy Number: SH-991204882. Network Hospital ID: HOSP-NAMO-001.", "OTHER"),
     ("PATIENT REGISTRATION & CONSENT TO TREATMENT FORM: General admission consent, consent for emergency stabilization, personal belongings disclaimer, and insurance information acknowledgment.", "OTHER"),
     ("PHARMACY CASH RECEIPT & TAX INVOICE: Receipt No: NAMO-PHARM-8821. Medicines dispensed: Ferrous Ascorbate 100mg (30 tabs), Vitamin C (30 tabs). GST invoice summary.", "OTHER"),
     ("HOSPITAL ADMISSION INTAKE ASSESSMENT: Patient demographic registration, emergency contact details, health insurance policy card copy, advance directive preference.", "OTHER"),
+    ("CONSENT FORM FOR BLOOD TRANSFUSION: Patient informed of benefits, transfusion risks, infectious disease testing precautions, and alternative options. Consent signed.", "OTHER"),
+    ("INFORMED CONSENT FOR SURGICAL PROCEDURE: Detailed surgical consent for Laparoscopic Cholecystectomy under general anesthesia. Risks explained by Dr. Raskik.", "OTHER"),
+    ("DISCHARGE SUMMARY ACKNOWLEDGMENT & HANDOVER SLIP: Patient received all discharge medications, discharge summary, follow-up appointment date, and signed release slip.", "OTHER"),
+    ("INVESTIGATION CHARGE SLIP: Namo Hospital Billing Counter. Charges for Complete Blood Count, Serum Ferritin, and Lipid Profile. Amount paid via UPI: INR 1,450.", "OTHER"),
+    ("HOSPITAL VISITOR PASS & ATTENDANT BADGE: Room 304, Inpatient Ward. Authorized attendant badge issued for patient Isaac Noronha.", "OTHER"),
+    ("HEALTH INSURANCE REIMBURSEMENT CLAIM FORM: Part A filled by insured patient, Part B filled by treating hospital. Original bills, discharge summary, and pharmacy receipts attached.", "OTHER"),
+    ("HOSPITAL BED ALLOCATION ORDER: Patient transferred from Emergency Triage to Deluxe Private Room 402 under Department of Internal Medicine.", "OTHER"),
+    ("BLOOD BANK REQUISITION FORM: Request for 1 unit of Packed Red Blood Cells (PRBC), B positive, cross-matched for transfusion in OT.", "OTHER"),
+    ("DEATH CERTIFICATE (FORM 4A): Cause of death: Cardiopulmonary arrest secondary to acute myocardial infarction. Pronounced at 14:30 hrs.", "OTHER"),
+    ("BIRTH NOTIFICATION FORM: Live male neonate delivered at 08:25 hrs. Birth weight 3.2 kg. Mother: Mrs. Mary Noronha. Registered with Municipal Corporation.", "OTHER"),
+    ("MEDICAL RECORDS RELEASE AUTHORIZATION: Patient authorizes release of complete inpatient records to attending specialist for secondary consultation.", "OTHER"),
+    ("EQUIPMENT MAINTENANCE & STERILIZATION LOG: Central Sterile Services Department (CSSD). Autoclave cycle 45 completed at 134°C with biological indicator pass.", "OTHER"),
+    ("AMBULANCE SERVICE DISPATCH SLIP: Emergency transport from residence to Namo Hospital Casualty. Cardiac monitor and oxygen support provided en route.", "OTHER"),
+    ("OUTPATIENT APPOINTMENT CONFIRMATION TOKEN: Namo Hospital OPD Registration. Token Number: 42. Consulting Doctor: Dr. Raskik, Room 104.", "OTHER"),
+    ("HOSPITAL DIETARY & NUTRITION MEAL PLAN: Low sodium, diabetic renal diet prescribed for inpatient room 302. Calorie allocation: 1800 kcal/day.", "OTHER"),
 ]

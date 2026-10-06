@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
-      - NEXT_PUBLIC_API_URL=http://api:4000
+      - API_BASE_URL=http://api:4000
     depends_on:
       - api
     restart: unless-stopped

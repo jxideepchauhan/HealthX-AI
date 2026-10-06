@@ -4,7 +4,9 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Input, Card, CardHeader, CardTitle, CardDescription, CardContent } from '@healthx/ui';
-import { apiFetch } from '@/lib/api';
+import { apiFetch, switchDemoPersona } from '@/lib/api';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { LanguageSelector } from '@/components/LanguageSelector';
 import {
   ShieldCheck,
   ArrowRight,
@@ -23,7 +25,9 @@ type RoleType = 'PATIENT' | 'DOCTOR' | 'HOSPITAL';
 type AuthMode = 'PASSWORD' | 'OTP';
 
 export default function LoginPage() {
+  const { t } = useLanguage();
   const router = useRouter();
+
   const [role, setRole] = useState<RoleType>('DOCTOR');
   const [authMode, setAuthMode] = useState<AuthMode>('PASSWORD');
   const [identifier, setIdentifier] = useState('DOC-RASKIK-4091');
@@ -113,12 +117,15 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 flex items-center justify-center p-4">
       <Card className="max-w-lg w-full bg-white/95 backdrop-blur-md shadow-2xl border-slate-700/20">
-        <CardHeader className="text-center pb-3">
+        <CardHeader className="text-center pb-3 relative">
+          <div className="absolute right-4 top-4">
+            <LanguageSelector variant="compact" />
+          </div>
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white font-bold flex items-center justify-center mx-auto mb-3 shadow-lg shadow-emerald-500/20">
             <ShieldCheck className="w-6 h-6" />
           </div>
           <CardTitle className="text-2xl text-slate-900 font-extrabold tracking-tight">
-            HealthX AI Portal Access
+            {t.appName} Portal Access
           </CardTitle>
           <CardDescription className="text-xs text-slate-500">
             Sign in with your Unique ID & Password or secure OTP
@@ -129,7 +136,7 @@ export default function LoginPage() {
           {/* Role Tabs */}
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">
-              Select Portal / Persona
+              {t.switchPortal}
             </label>
             <div className="grid grid-cols-3 gap-2">
               <button
@@ -142,7 +149,7 @@ export default function LoginPage() {
                 }`}
               >
                 <Stethoscope className="w-4 h-4 mb-1 text-blue-600" />
-                Doctor Portal
+                {t.doctorPortal}
               </button>
 
               <button
@@ -155,7 +162,7 @@ export default function LoginPage() {
                 }`}
               >
                 <Building2 className="w-4 h-4 mb-1 text-purple-600" />
-                Hospital Portal
+                {t.hospitalPortal}
               </button>
 
               <button
@@ -168,41 +175,56 @@ export default function LoginPage() {
                 }`}
               >
                 <UserCheck className="w-4 h-4 mb-1 text-emerald-600" />
-                Patient Portal
+                {t.patientPortal}
               </button>
             </div>
           </div>
 
-          {/* Quick Demo Pre-fills */}
-          <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-            <div className="flex items-center justify-between text-[11px] text-slate-600 mb-1.5 font-medium">
-              <span className="flex items-center gap-1 text-slate-800 font-semibold">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Quick Demo Credentials:
+          {/* Quick Demo Pre-fills & 1-Click Access */}
+          <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+            <div className="flex items-center justify-between text-[11px] text-slate-600 font-medium">
+              <span className="flex items-center gap-1.5 text-slate-800 font-bold">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" /> 1-Click Instant Demo Access:
               </span>
-              <span className="text-[10px] text-slate-400">Click to autofill</span>
+              <span className="text-[10px] text-slate-400 font-mono">No typing required</span>
             </div>
-            <div className="flex flex-wrap gap-1.5 text-[11px]">
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <button
                 type="button"
-                onClick={() => handleRoleSelect('DOCTOR')}
-                className="px-2 py-0.5 rounded bg-blue-100/70 hover:bg-blue-100 text-blue-800 font-medium border border-blue-200 transition"
+                onClick={() => switchDemoPersona('DOCTOR')}
+                className="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm transition"
               >
-                Dr. Raskik (<code className="font-mono">DOC-RASKIK-4091</code>)
+                <Stethoscope className="w-3.5 h-3.5" />
+                <span>Dr. Raskik</span>
               </button>
               <button
                 type="button"
-                onClick={() => handleRoleSelect('HOSPITAL')}
-                className="px-2 py-0.5 rounded bg-purple-100/70 hover:bg-purple-100 text-purple-800 font-medium border border-purple-200 transition"
+                onClick={() => switchDemoPersona('HOSPITAL')}
+                className="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs shadow-sm transition"
               >
-                Namo Hospital (<code className="font-mono">HOSP-NAMO-001</code>)
+                <Building2 className="w-3.5 h-3.5" />
+                <span>Namo Hospital</span>
               </button>
               <button
                 type="button"
-                onClick={() => handleRoleSelect('PATIENT')}
-                className="px-2 py-0.5 rounded bg-emerald-100/70 hover:bg-emerald-100 text-emerald-800 font-medium border border-emerald-200 transition"
+                onClick={() => switchDemoPersona('PATIENT')}
+                className="flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm transition"
               >
-                Isaac Noronha (<code className="font-mono">PAT-ISAAC-1001</code>)
+                <UserCheck className="w-3.5 h-3.5" />
+                <span>Isaac Noronha</span>
               </button>
+            </div>
+
+            <div className="pt-1.5 border-t border-slate-200/80 flex items-center justify-between text-[10px] text-slate-500">
+              <span>Auto-fill Credentials:</span>
+              <div className="flex items-center gap-2">
+                <button type="button" onClick={() => handleRoleSelect('DOCTOR')} className="hover:text-blue-700 underline">Doctor</button>
+                <span>&bull;</span>
+                <button type="button" onClick={() => handleRoleSelect('HOSPITAL')} className="hover:text-purple-700 underline">Hospital</button>
+                <span>&bull;</span>
+                <button type="button" onClick={() => handleRoleSelect('PATIENT')} className="hover:text-emerald-700 underline">Patient</button>
+              </div>
             </div>
           </div>
 

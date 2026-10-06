@@ -17,6 +17,7 @@ import {
 
 export default function HospitalUploadPage() {
   const [patientId, setPatientId] = useState('patient-isaac-noronha-2026');
+  const [patients, setPatients] = useState<any[]>([]);
   const [title, setTitle] = useState('Hospital Laboratory Summary & Clinical Observation');
   const [docCategory, setDocCategory] = useState('LAB_REPORT');
   const [textContent, setTextContent] = useState(
@@ -24,6 +25,21 @@ export default function HospitalUploadPage() {
   );
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    async function loadPatients() {
+      try {
+        const res = await apiFetch<{ patients: any[] }>('/hospital/patients');
+        if (res?.patients?.length) {
+          setPatients(res.patients);
+          setPatientId(res.patients[0].patientId);
+        }
+      } catch (err) {
+        console.warn('Could not load hospital consented patients', err);
+      }
+    }
+    loadPatients();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,14 +92,28 @@ export default function HospitalUploadPage() {
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-slate-300 mb-1 font-semibold">Target Patient ID / Identifier</label>
-                <Input
-                  type="text"
-                  value={patientId}
-                  onChange={(e) => setPatientId(e.target.value)}
-                  required
-                  className="bg-slate-900 border-slate-700 text-white font-mono"
-                />
+                <label className="block text-slate-300 mb-1 font-semibold">Target Patient (Active Consented)</label>
+                {patients.length > 0 ? (
+                  <select
+                    value={patientId}
+                    onChange={(e) => setPatientId(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white"
+                  >
+                    {patients.map((p) => (
+                      <option key={p.patientId} value={p.patientId}>
+                        {p.name} ({p.uniqueId || p.patientId}) - {p.bloodGroup || 'A+'}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <Input
+                    type="text"
+                    value={patientId}
+                    onChange={(e) => setPatientId(e.target.value)}
+                    required
+                    className="bg-slate-900 border-slate-700 text-white font-mono"
+                  />
+                )}
               </div>
 
               <div>

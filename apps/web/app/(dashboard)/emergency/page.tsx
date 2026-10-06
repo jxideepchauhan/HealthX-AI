@@ -22,6 +22,39 @@ export default function EmergencyPage() {
     emergencyContact: true,
   });
 
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        const res = await apiFetch<{ profile: any }>('/profile');
+        if (res?.profile) {
+          const p = res.profile;
+          let parsedAllergies = ['Unknown'];
+          try {
+            if (p.allergiesJson) parsedAllergies = JSON.parse(p.allergiesJson);
+          } catch {
+            // Keep default
+          }
+          let parsedEmergency = { name: 'Emergency Contact', phone: '+91-9876543210', relation: 'Contact' };
+          try {
+            if (p.emergencyContactJson) parsedEmergency = JSON.parse(p.emergencyContactJson);
+          } catch {
+            // Keep default
+          }
+          setProfile({
+            name: p.name || 'Patient',
+            bloodGroup: p.bloodGroup || 'A+',
+            allergies: parsedAllergies,
+            importantInfo: p.importantMedicalInformation || 'None reported.',
+            emergencyContact: parsedEmergency,
+          });
+        }
+      } catch (err) {
+        console.warn('Could not load real emergency profile, using defaults', err);
+      }
+    }
+    loadProfile();
+  }, []);
+
   const toggleField = (key: keyof typeof visibleFields) => {
     setVisibleFields({ ...visibleFields, [key]: !visibleFields[key] });
   };

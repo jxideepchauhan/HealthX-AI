@@ -1,14 +1,14 @@
 {
   "timestamp": "2026-10-06T16:04:00Z",
   "status": "VALIDATED",
-  "training_duration_seconds": 0.49,
+  "training_duration_seconds": 0.93,
   "models": {
     "document-classifier": {
       "model_name": "document-classifier",
       "version": "1.0.0",
       "dataset_version": "v1-2026-synthetic",
       "training_date": "2026-10-06T16:03:00Z",
-      "sample_count": 80,
+      "sample_count": 160,
       "classes": [
         "CONSULTATION",
         "DIAGNOSTIC_REPORT",
@@ -20,35 +20,35 @@
         "VACCINATION_RECORD"
       ],
       "train_accuracy": 1.0,
-      "cv_accuracy": 0.925,
-      "accuracy": 0.925,
-      "precision": 0.9470486111111112,
-      "recall": 0.8910714285714285,
-      "f1": 0.910393086210149,
+      "cv_accuracy": 0.9125,
+      "accuracy": 0.9125,
+      "precision": 0.9126867413632119,
+      "recall": 0.9125000000000001,
+      "f1": 0.9112371196613815,
       "cer": 0.005,
       "wer": 0.012,
       "latency_ms": 2.8
     },
     "medical-ner": {
       "model_name": "medical-ner",
-      "version": "2.0.0",
-      "dataset_version": "v2-2026-clinical-ner-benchmark",
-      "precision": 1.0,
-      "recall": 0.92,
-      "f1": 0.9583,
+      "version": "2.1.0",
+      "dataset_version": "v2.1-clinical-ner-healthcare-benchmarks",
+      "precision": 0.9167,
+      "recall": 0.9167,
+      "f1": 0.9167,
       "field_accuracy": 1.0,
-      "cer": 0.008,
-      "wer": 0.015,
-      "latency_ms": 3.1
+      "cer": 0.005,
+      "wer": 0.01,
+      "latency_ms": 2.7
     }
   },
   "aggregate_summary": {
-    "document_classification_accuracy": 0.925,
-    "document_classification_f1": 0.910393086210149,
-    "ner_macro_f1": 0.9583,
+    "document_classification_accuracy": 0.9125,
+    "document_classification_f1": 0.9112371196613815,
+    "ner_macro_f1": 0.9167,
     "ner_field_accuracy": 1.0,
-    "average_cer": 0.0065,
-    "average_wer": 0.0135,
-    "average_latency_ms": 2.95
+    "average_cer": 0.005,
+    "average_wer": 0.011,
+    "average_latency_ms": 2.75
   }
 }

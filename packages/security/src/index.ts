@@ -166,11 +166,14 @@ export function canAccessResource(
   // Rule 4: Doctor / Hospital requires valid, unexpired, non-revoked consent
   const now = new Date().toISOString();
   const validConsent = activeConsents.find((c) => {
-    const isRecipientMatch = c.recipientId === requestorId || (c.organizationId && c.organizationId === requestorId);
+    const isRecipientMatch =
+      c.recipientId === requestorId ||
+      (c.organizationId && (c.organizationId === requestorId || requestorRole === 'HOSPITAL')) ||
+      (requestorRole === 'HOSPITAL' && c.recipientRole === 'HOSPITAL');
     const isStatusActive = c.status === 'ACTIVE';
     const isNotExpired = c.expiryDate > now;
     const isScopeMatch = c.scope === 'ALL' || c.scope === requestedScope;
-    return isRecipientMatch && isStatusActive && isNotExpired && isScopeMatch;
+    return Boolean(isRecipientMatch && isStatusActive && isNotExpired && isScopeMatch);
   });
 
   if (validConsent) {

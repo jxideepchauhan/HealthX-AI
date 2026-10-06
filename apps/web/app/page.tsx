@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { LanguageSelector } from '@/components/LanguageSelector';
 import {
   FileText,
   Bot,
@@ -17,37 +19,40 @@ import {
 } from 'lucide-react';
 
 export default function LandingPage() {
+  const { t } = useLanguage();
+
   const features = [
     {
-      title: 'Medical Record Intelligence',
+      title: t.featureRecordIntelligence,
       desc: 'Seamless ingestion and OCR extraction across printed and handwritten lab results, prescriptions, and summaries.',
       icon: FileText,
     },
     {
-      title: 'AI Health Copilot',
+      title: t.featureCopilot,
       desc: 'Strictly grounded clinical explanations with source-document citations. Never hallucinates or invents diagnoses.',
       icon: Bot,
     },
     {
-      title: 'Unified Health Journey',
+      title: t.featureJourney,
       desc: 'Chronological timeline connecting encounters, observations, lab tests, prescriptions, and symptoms into a single record.',
       icon: HeartPulse,
     },
     {
-      title: 'Lab Intelligence',
+      title: t.featureLabs,
       desc: 'Automatic reference interval matching, abnormality detection, and longitudinal trend analysis over time.',
       icon: FlaskConical,
     },
     {
-      title: 'Doctor Visit Mode',
+      title: t.featureDoctorVisit,
       desc: 'Generates comprehensive, edit-ready doctor visit briefs summarizing recent changes, medicines, and key questions.',
       icon: Stethoscope,
     },
     {
-      title: 'Consent-Based Sharing',
+      title: t.featureConsent,
       desc: 'Fine-grained, time-bound consent controls. Instantly revoke access to any doctor or hospital with a single click.',
       icon: ShieldCheck,
     },
+
     {
       title: 'FHIR-Ready Architecture',
       desc: 'Built upon HL7 FHIR Release 4 compatible schemas for seamless hospital interoperability and data portability.',
@@ -72,7 +77,8 @@ export default function LandingPage() {
             <span className="font-bold text-slate-900 tracking-tight text-lg">HEALTHX AI</span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <LanguageSelector variant="pill" />
             <Link
               href="/login"
               className="text-xs font-semibold text-slate-600 hover:text-slate-900 px-3 py-1.5"
@@ -83,7 +89,7 @@ export default function LandingPage() {
               href="/dashboard"
               className="text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg transition-colors shadow-sm"
             >
-              Get Started
+              {t.getStarted}
             </Link>
           </div>
         </div>
@@ -97,12 +103,12 @@ export default function LandingPage() {
         </div>
 
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
-          Your Health. <br className="hidden sm:inline" />
-          <span className="text-emerald-600">Connected. Understood.</span>
+          {t.appName}. <br className="hidden sm:inline" />
+          <span className="text-emerald-600">{t.tagline}</span>
         </h1>
 
         <p className="mt-6 text-base md:text-lg text-slate-600 max-w-2xl mx-auto font-normal leading-relaxed">
-          Turn fragmented medical records into one intelligent, searchable and understandable health journey.
+          {t.heroSub}
         </p>
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -110,14 +116,14 @@ export default function LandingPage() {
             href="/dashboard"
             className="w-full sm:w-auto px-6 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all"
           >
-            <span>Get Started</span>
+            <span>{t.getStarted}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             href="/journey"
             className="w-full sm:w-auto px-6 py-3 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-sm transition-all shadow-sm"
           >
-            Explore HealthX
+            {t.exploreHealthx}
           </Link>
         </div>
 

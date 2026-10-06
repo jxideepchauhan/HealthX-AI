@@ -70,6 +70,7 @@ authRouter.post('/verify-otp', async (req, res, next) => {
 
     const user = await prisma.user.findUnique({
       where: { identifier },
+      include: { profile: true },
     });
 
     if (!user || !user.otpHash || !user.otpSalt || !user.otpExpiresAt) {
@@ -139,7 +140,11 @@ authRouter.post('/verify-otp', async (req, res, next) => {
       user: {
         id: user.id,
         identifier: user.identifier,
+        uniqueId: user.uniqueId,
         role: user.role,
+        doctorLicense: user.doctorLicense,
+        hospitalCode: user.hospitalCode,
+        name: user.profile?.name || user.identifier,
       },
     });
   } catch (err) {

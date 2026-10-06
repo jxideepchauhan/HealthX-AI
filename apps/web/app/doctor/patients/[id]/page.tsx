@@ -48,11 +48,11 @@ export default function DoctorPatientDetailPage() {
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl md:text-2xl font-bold text-slate-900">{patient.profile?.name}</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-slate-900">{patient.profile?.name || patient.identifier}</h1>
               <Badge variant="success">CONSENT VERIFIED</Badge>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              DOB: {patient.profile?.dob} &bull; Blood: {patient.profile?.bloodGroup} &bull; Location: {patient.profile?.location}
+              DOB: {patient.profile?.dob || 'N/A'} &bull; Blood: {patient.profile?.bloodGroup || 'N/A'} &bull; Location: {patient.profile?.location || 'N/A'}
             </p>
           </div>
         </div>

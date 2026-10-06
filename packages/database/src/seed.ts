@@ -446,6 +446,23 @@ async function main() {
     },
   });
 
+  // Active Institutional Consent: Patient granted to Namo Hospital
+  await prisma.consent.create({
+    data: {
+      patientId: patient.id,
+      recipientId: hospitalUser.id,
+      recipientName: 'Namo Hospital Admin',
+      recipientRole: 'HOSPITAL',
+      organizationId: hospital.id,
+      organizationName: 'Namo Hospital & Research Center',
+      scope: 'ALL',
+      startDate: '2026-09-15T00:00:00.000Z',
+      expiryDate: '2027-09-15T00:00:00.000Z',
+      status: 'ACTIVE',
+      purpose: 'Institutional EHR record management and diagnostics',
+    },
+  });
+
   // 10. Embedding for RAG
   await prisma.embedding.create({
     data: {

@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardContent, Badge, Button } from '@healthx/ui';
 import { apiFetch } from '@/lib/api';
-import {
+import * as RechartsModule from 'recharts';
+
+const {
   LineChart,
   Line,
   XAxis,
@@ -14,7 +16,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
   CartesianGrid,
-} from 'recharts';
+} = RechartsModule as any;
 import { ArrowLeft, FlaskConical, Calendar, FileText, Sparkles } from 'lucide-react';
 
 export default function LabDetailPage() {

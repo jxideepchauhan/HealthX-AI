@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent, Badge, Button, Input } from '@healthx/ui';
-import { apiFetch } from '@/lib/api';
+import { apiFetch, logout } from '@/lib/api';
+import { LanguageSelector } from '@/components/LanguageSelector';
 import {
   Stethoscope,
   Users,
@@ -196,6 +197,7 @@ export default function DoctorPortalPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            <LanguageSelector variant="pill" />
             <Button
               size="sm"
               variant="outline"
@@ -204,11 +206,14 @@ export default function DoctorPortalPage() {
             >
               <ShieldCheck className="w-3.5 h-3.5 mr-1 text-emerald-400" /> Request Consent
             </Button>
-            <Link href="/login">
-              <Button size="sm" variant="ghost" className="text-xs text-slate-400 hover:text-white">
-                <LogOut className="w-3.5 h-3.5 mr-1" /> Logout
-              </Button>
-            </Link>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => logout()}
+              className="text-xs text-slate-400 hover:text-white"
+            >
+              <LogOut className="w-3.5 h-3.5 mr-1" /> Logout
+            </Button>
           </div>
         </div>
 
