@@ -1,0 +1,494 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               String            @id @default(uuid())
+  identifier       String            @unique // email or phone
+  uniqueId         String?           @unique // e.g. DOC-RASKIK-4091, HOSP-NAMO-001, PAT-ISAAC-1001
+  passwordHash     String?
+  passwordSalt     String?
+  doctorLicense    String?
+  hospitalCode     String?
+  role             String            @default("PATIENT")
+  otpHash          String?
+  otpSalt          String?
+  otpExpiresAt     DateTime?
+  failedOtpCount   Int               @default(0)
+  lockedUntil      DateTime?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  profile          Profile?
+  documents        Document[]
+  labResults       LabResult[]
+  medications      Medication[]
+  conditions       Condition[]
+  encounters       Encounter[]
+  timelineEvents   TimelineEvent[]
+  appointments     Appointment[]
+  consentsGiven    Consent[]         @relation("PatientConsents")
+  auditEvents      AuditEvent[]
+  conversations    Conversation[]
+  abhaConnection   ABHAConnection?
+  fhirResources    FHIRResource[]
+  embeddings       Embedding[]
+}
+
+model Profile {
+  id                          String             @id @default(uuid())
+  userId                      String             @unique
+  user                        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name                        String
+  dob                         String
+  sex                         String
+  preferredLanguage           String             @default("English")
+  location                    String
+  bloodGroup                  String
+  heightCm                    Float
+  weightKg                    Float
+  allergiesJson               String             @default("[]")
+  importantMedicalInformation String             @default("None reported")
+  regularDoctor               String?
+  regularHospital             String?
+  sleepHours                  String?
+  exerciseHabits              String?
+  dailySteps                  Int?
+  emergencyContacts           EmergencyContact[]
+  createdAt                   DateTime           @default(now())
+  updatedAt                   DateTime           @updatedAt
+}
+
+model EmergencyContact {
+  id           String   @id @default(uuid())
+  profileId    String
+  profile      Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name         String
+  relationship String
+  phone        String
+  createdAt    DateTime @default(now())
+}
+
+model Document {
+  id               String            @id @default(uuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title            String
+  fileName         String
+  fileType         String
+  mimeType         String
+  fileSize         Int
+  storageKey       String
+  fileHash         String
+  processingStatus String            @default("QUEUED") // QUEUED, PROCESSING, COMPLETED, FAILED
+  duplicateOfId    String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  pages            DocumentPage[]
+  ocrResult        OCRResult?
+  extractedEntities ExtractedEntity[]
+  labResults       LabResult[]
+  medications      Medication[]
+  timelineEvents   TimelineEvent[]
+  processingJobs   ProcessingJob[]
+  embeddings       Embedding[]
+
+  @@index([userId])
+  @@index([fileHash])
+}
+
+model DocumentPage {
+  id          String   @id @default(uuid())
+  documentId  String
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  pageNumber  Int
+  imageKey    String?
+  textContent String
+  createdAt   DateTime @default(now())
+
+  @@index([documentId])
+}
+
+model OCRResult {
+  id                   String   @id @default(uuid())
+  documentId           String   @unique
+  document             Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  fullText             String
+  confidence           Float
+  language             String   @default("en")
+  isHandwritten        Boolean  @default(false)
+  handwritingConfidence Float   @default(0.0)
+  createdAt            DateTime @default(now())
+}
+
+model ExtractedEntity {
+  id                 String   @id @default(uuid())
+  documentId         String
+  document           Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  entityType         String
+  value              String
+  normalizedValue    String?
+  confidence         Float
+  pageNumber         Int?
+  boundingBoxJson    String?
+  verificationStatus String   @default("UNVERIFIED") // UNVERIFIED, USER_VERIFIED, SOURCE_VERIFIED
+  createdAt          DateTime @default(now())
+
+  @@index([documentId])
+}
+
+model LabResult {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  testName            String
+  normalizedName      String?
+  value               String
+  numericValue        Float?
+  unit                String
+  referenceLow        Float?
+  referenceHigh       Float?
+  referenceText       String?
+  status              String    @default("NORMAL") // LOW, NORMAL, HIGH, UNKNOWN
+  testDate            String
+  sourceDocumentId    String?
+  sourceDocument      Document? @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+  pageNumber          Int?
+  dataOrigin          String    @default("USER_PROVIDED")
+  verificationStatus  String    @default("UNVERIFIED")
+  notes               String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([testDate])
+}
+
+model Observation {
+  id            String   @id @default(uuid())
+  userId        String
+  category      String
+  code          String
+  value         String
+  unit          String?
+  status        String   @default("final")
+  effectiveDate String
+  dataOrigin    String   @default("USER_PROVIDED")
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Medication {
+  id                 String              @id @default(uuid())
+  userId             String
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name               String
+  genericName        String?
+  strength           String?
+  dosage             String?
+  frequency          String?
+  route              String?
+  duration           String?
+  startDate          String?
+  endDate            String?
+  prescriber         String?
+  hospital           String?
+  instructions       String?
+  sourceDocumentId   String?
+  sourceDocument     Document?           @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+  dataOrigin         String              @default("USER_PROVIDED")
+  verificationStatus String              @default("UNVERIFIED")
+  isActive           Boolean             @default(true)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  requests           MedicationRequest[]
+
+  @@index([userId])
+}
+
+model MedicationRequest {
+  id           String     @id @default(uuid())
+  userId       String
+  medicationId String
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  intent       String     @default("order")
+  status       String     @default("active")
+  authoredOn   String?
+  createdAt    DateTime   @default(now())
+
+  @@index([userId])
+}
+
+model Condition {
+  id                 String   @id @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code               String?
+  name               String
+  clinicalStatus     String   @default("active")
+  verificationStatus String   @default("unconfirmed")
+  onsetDate          String?
+  dataOrigin         String   @default("USER_PROVIDED")
+  createdAt          DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Encounter {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  encounterType String   @default("CONSULTATION")
+  status        String   @default("finished")
+  doctorName    String?
+  hospitalName  String?
+  startDate     String
+  reason        String?
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([startDate])
+}
+
+model DiagnosticReport {
+  id               String   @id @default(uuid())
+  userId           String
+  code             String
+  title            String
+  status           String   @default("final")
+  effectiveDate    String
+  sourceDocumentId String?
+  createdAt        DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Procedure {
+  id            String   @id @default(uuid())
+  userId        String
+  name          String
+  status        String   @default("completed")
+  performedDate String
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+}
+
+model TimelineEvent {
+  id               String    @id @default(uuid())
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventType        String
+  title            String
+  description      String
+  eventDate        String
+  sourceDocumentId String?
+  sourceDocument   Document? @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+  dataOrigin       String    @default("USER_PROVIDED")
+  metadataJson     String?
+  createdAt        DateTime  @default(now())
+
+  @@index([userId])
+  @@index([eventDate])
+}
+
+model Doctor {
+  id             String    @id @default(uuid())
+  name           String
+  specialization String
+  phone          String?
+  email          String?
+  hospitalId     String?
+  hospital       Hospital? @relation(fields: [hospitalId], references: [id], onDelete: SetNull)
+  createdAt      DateTime  @default(now())
+}
+
+model Hospital {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  phone     String?
+  email     String?
+  doctors   Doctor[]
+  createdAt DateTime @default(now())
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  orgType   String
+  createdAt DateTime @default(now())
+}
+
+model Appointment {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  doctorName      String
+  hospitalName    String?
+  appointmentDate String
+  reason          String
+  status          String   @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([appointmentDate])
+}
+
+model Consent {
+  id               String   @id @default(uuid())
+  patientId        String
+  patient          User     @relation("PatientConsents", fields: [patientId], references: [id], onDelete: Cascade)
+  recipientId      String
+  recipientName    String
+  recipientRole    String
+  organizationId   String?
+  organizationName String?
+  scope            String   @default("ALL")
+  recordsJson      String?  @default("[]")
+  startDate        String
+  expiryDate       String
+  status           String   @default("ACTIVE") // ACTIVE, EXPIRED, REVOKED
+  purpose          String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([recipientId])
+  @@index([expiryDate])
+}
+
+model AuditEvent {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userRole     String
+  action       String
+  resource     String
+  resourceId   String
+  result       String   @default("SUCCESS")
+  ipAddress    String?
+  userAgent    String?
+  hash         String
+  previousHash String
+  timestamp    String
+  metadataJson String?
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([timestamp])
+}
+
+model Conversation {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String    @default("Health Assistant Conversation")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+
+  @@index([userId])
+}
+
+model Message {
+  id              String        @id @default(uuid())
+  conversationId  String
+  conversation    Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role            String        // user, assistant, system
+  content         String
+  confidence      Float?
+  safetyFlagsJson String?
+  createdAt       DateTime      @default(now())
+  citations       Citation[]
+
+  @@index([conversationId])
+}
+
+model Citation {
+  id            String   @id @default(uuid())
+  messageId     String
+  message       Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  documentId    String
+  documentTitle String
+  page          Int
+  field         String?
+  date          String?
+  excerpt       String
+  createdAt     DateTime @default(now())
+
+  @@index([messageId])
+}
+
+model Embedding {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  chunkId    String
+  chunkText  String
+  vectorJson String   // stored embedding vector array
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([documentId])
+}
+
+model ABHAConnection {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status      String   @default("NOT_CONNECTED") // NOT_CONNECTED, PENDING, CONNECTED, ERROR
+  abhaAddress String?
+  abhaNumber  String?
+  linkedAt    DateTime?
+  updatedAt   DateTime @updatedAt
+}
+
+model FHIRResource {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resourceType String
+  resourceId   String
+  rawJson      String
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([resourceType])
+}
+
+model ModelVersion {
+  id             String   @id @default(uuid())
+  modelName      String
+  version        String
+  datasetVersion String
+  metricsJson    String
+  artifactPath   String
+  status         String   @default("ACTIVE")
+  createdAt      DateTime @default(now())
+}
+
+model ProcessingJob {
+  id           String    @id @default(uuid())
+  documentId   String
+  document     Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  status       String    @default("QUEUED") // QUEUED, PROCESSING, COMPLETED, FAILED, RETRYING
+  stage        String    @default("UPLOAD")
+  attempts     Int       @default(0)
+  maxAttempts  Int       @default(3)
+  errorMessage String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([documentId])
+  @@index([status])
+}

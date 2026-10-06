@@ -1,0 +1,8 @@
+{"text": "Patient Isaac Noronha presented with fatigue and occasional dizziness. Physician Dr. Raskik. Prescribed Iron supplement. CBC ordered.", "label": "CONSULTATION"}
+{"text": "Laboratory Report: Hemoglobin 10.8 g/dL (Reference 13.0-17.0). Ferritin 12 ng/mL (Reference 30-400). RBC 4.1 mil/cumm.", "label": "LAB_REPORT"}
+{"text": "Rx: Tab Iron Supplement 1 tablet daily after food for 30 days. Dr. Raskik Namo Hospital.", "label": "PRESCRIPTION"}
+{"text": "DISCHARGE SUMMARY: Patient admitted for acute severe dehydration. Discharged in stable condition. Follow up in 7 days.", "label": "DISCHARGE_SUMMARY"}
+{"text": "Diagnostic Imaging: Chest X-Ray PA View. Impression: Lung fields are clear. No active infiltrates seen.", "label": "DIAGNOSTIC_REPORT"}
+{"text": "COVID-19 Vaccination Certificate: Covishield Dose 2 administered on 12/04/2022 at City Health Center.", "label": "VACCINATION_RECORD"}
+{"text": "Medical fitness certificate for travel and adventure sports. Patient is physically fit.", "label": "MEDICAL_CERTIFICATE"}
+{"text": "General health invoice and appointment billing receipt for outpatient consultation.", "label": "OTHER"}

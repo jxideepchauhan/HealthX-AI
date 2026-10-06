@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.web
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=http://api:4000
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.api
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - DATABASE_URL=postgresql://healthx_user:healthx_secure_pass_2026@postgres:5432/healthx_db?schema=public
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SECRET=healthx-ai-super-secure-production-jwt-secret-key-2026
+      - ML_SERVICE_URL=http://ml-service:8000
+      - S3_ENDPOINT=http://minio:9000
+      - S3_BUCKET=healthx-documents
+      - S3_ACCESS_KEY=minioadmin
+      - S3_SECRET_KEY=minioadmin
+    depends_on:
+      - postgres
+      - redis
+      - ml-service
+    restart: unless-stopped
+
+  ml-service:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.ml
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_PROVIDER=local
+    restart: unless-stopped
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=healthx_user
+      - POSTGRES_PASSWORD=healthx_secure_pass_2026
+      - POSTGRES_DB=healthx_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

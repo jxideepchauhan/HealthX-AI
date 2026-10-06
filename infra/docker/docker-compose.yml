@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.web
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.api
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - DATABASE_URL=postgresql://healthx_user:healthx_secure_pass_2026@postgres:5432/healthx_db?schema=public
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SECRET=healthx-ai-super-secure-production-jwt-secret-key-2026
+      - ML_SERVICE_URL=http://ml-service:8000
+    depends_on:
+      - postgres
+      - redis
+      - ml-service
+    restart: unless-stopped
+
+  ml-service:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.ml
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=healthx_user
+      - POSTGRES_PASSWORD=healthx_secure_pass_2026
+      - POSTGRES_DB=healthx_db
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped

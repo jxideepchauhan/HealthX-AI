@@ -1,0 +1,36 @@
+{
+  "name": "healthx-ai-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HealthX AI - AI-Powered Personal Health Copilot Full-Stack Application",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:api": "vitest run tests/integration/api.test.ts",
+    "test:security": "vitest run tests/security/security.test.ts",
+    "test:rag": "vitest run tests/rag/rag.test.ts",
+    "test:ml": "cd apps/ml-service && pytest -v",
+    "dev:api": "npm --workspace=@healthx/api run dev",
+    "dev:web": "npm --workspace=@healthx/web run dev",
+    "dev:ml": "cd apps/ml-service && uvicorn main:app --reload --port 8000",
+    "db:generate": "npm --workspace=@healthx/database run db:generate",
+    "db:push": "npm --workspace=@healthx/database run db:push",
+    "db:seed": "npm --workspace=@healthx/database run db:seed",
+    "ml:train": "cd apps/ml-service && python -m training.train_classifier && python -m training.train_ner",
+    "ml:evaluate": "cd apps/ml-service && python -m training.evaluate"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/supertest": "^7.2.1",
+    "supertest": "^7.3.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

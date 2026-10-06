@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'healthx-api'
+    static_configs:
+      - targets: ['api:4000']
+
+  - job_name: 'healthx-ml'
+    static_configs:
+      - targets: ['ml-service:8000']

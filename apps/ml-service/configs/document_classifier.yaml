@@ -1,0 +1,22 @@
+model_name: "document-classifier"
+version: "1.0.0"
+dataset_version: "v1-2026-synthetic"
+architecture: "tfidf-logistic-regression"
+hyperparameters:
+  max_features: 5000
+  ngram_range: [1, 2]
+  C: 1.0
+  penalty: "l2"
+  random_state: 42
+categories:
+  - "PRESCRIPTION"
+  - "LAB_REPORT"
+  - "CONSULTATION"
+  - "DISCHARGE_SUMMARY"
+  - "DIAGNOSTIC_REPORT"
+  - "MEDICAL_CERTIFICATE"
+  - "VACCINATION_RECORD"
+  - "OTHER"
+train_test_split:
+  test_size: 0.2
+  stratify: true

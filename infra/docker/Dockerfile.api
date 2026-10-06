@@ -1,0 +1,23 @@
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+COPY packages ./packages
+COPY apps/api ./apps/api
+COPY tsconfig.base.json ./
+
+RUN npm ci
+RUN npm --workspace=@healthx/database run db:generate
+RUN npm --workspace=@healthx/api run build
+
+FROM node:22-alpine AS runner
+
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY --from=builder /app ./
+
+EXPOSE 4000
+
+CMD ["npm", "--workspace=@healthx/api", "run", "start"]

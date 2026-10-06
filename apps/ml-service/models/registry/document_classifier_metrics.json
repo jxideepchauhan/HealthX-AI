@@ -1,0 +1,26 @@
+{
+  "model_name": "document-classifier",
+  "version": "1.0.0",
+  "dataset_version": "v1-2026-synthetic",
+  "training_date": "2026-10-06T16:03:00Z",
+  "sample_count": 80,
+  "classes": [
+    "CONSULTATION",
+    "DIAGNOSTIC_REPORT",
+    "DISCHARGE_SUMMARY",
+    "LAB_REPORT",
+    "MEDICAL_CERTIFICATE",
+    "OTHER",
+    "PRESCRIPTION",
+    "VACCINATION_RECORD"
+  ],
+  "train_accuracy": 1.0,
+  "cv_accuracy": 0.925,
+  "accuracy": 0.925,
+  "precision": 0.9470486111111112,
+  "recall": 0.8910714285714285,
+  "f1": 0.910393086210149,
+  "cer": 0.005,
+  "wer": 0.012,
+  "latency_ms": 2.8
+}
