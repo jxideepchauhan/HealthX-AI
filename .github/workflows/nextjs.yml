@@ -24,6 +24,6 @@ jobs:
         run: npm ci
 
       - name: Build Web Application
-        run: npm run build --workspace=@healthx/web
+        run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1

@@ -8,7 +8,8 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build:packages": "npm run build --workspace=@healthx/types && npm run build --workspace=@healthx/shared && npm run build --workspace=@healthx/ui",
+    "build": "npm run build:packages && npm run build --workspace=@healthx/web",
     "typecheck": "npm run typecheck --workspaces",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
